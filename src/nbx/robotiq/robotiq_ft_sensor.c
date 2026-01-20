@@ -16,9 +16,12 @@ void robif2b_robotiq_ft_configure(struct robif2b_robotiq_ft_nbx *b)
 {
     b->internal = calloc(1, sizeof(struct robotiq_ft_internal));
     
-    if (rq_sensor_state() != 0) {
-        *b->success = false;
-        return;
+    // if (rq_sensor_state() != 0) {
+    //     *b->success = false;
+    //     return;
+    // }
+    while (rq_sensor_state() != 0) {
+        usleep(100000);
     }
     
     rq_com_get_str_serial_number((INT_8*)b->serial_number);

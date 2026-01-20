@@ -29,9 +29,10 @@ int main(void)
 
     robif2b_robotiq_ft_start(&sensor);
 
-    robif2b_robotiq_ft_zero(&sensor);
+    // robif2b_robotiq_ft_zero(&sensor);
 
-    for (int i = 0; i < 1000; i++) {
+    // for (int i = 0; i < 1000; i++) {
+    while (true) {
         robif2b_robotiq_ft_update(&sensor);
         if (new_data) {
             printf("F: [%6.2f, %6.2f, %6.2f] N  T: [%6.3f, %6.3f, %6.3f] Nm\n",
