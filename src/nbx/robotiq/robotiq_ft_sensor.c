@@ -61,28 +61,29 @@ void robif2b_robotiq_ft_stop(struct robif2b_robotiq_ft_nbx *b)
 
 void robif2b_robotiq_ft_update(struct robif2b_robotiq_ft_nbx *b)
 {
-    // Run state machine
-    rq_sensor_state();
+    rq_com_listen_stream(); // non-blocking call to update the stream data
     
-    if (rq_state_got_new_message()) {
-        if (b->force_x)  *b->force_x  = rq_state_get_received_data(0);
-        if (b->force_y)  *b->force_y  = rq_state_get_received_data(1);
-        if (b->force_z)  *b->force_z  = rq_state_get_received_data(2);
-        if (b->torque_x) *b->torque_x = rq_state_get_received_data(3);
-        if (b->torque_y) *b->torque_y = rq_state_get_received_data(4);
-        if (b->torque_z) *b->torque_z = rq_state_get_received_data(5);
-        
-        if (b->wrench) {
-            for (int i = 0; i < 6; i++) {
-                b->wrench[i] = rq_state_get_received_data(i);
-            }
-        }
-        *b->new_data = true;
-    } else {
+    *b->success = rq_com_get_valid_stream(); // check if the stream is valid
+
+    if (!*b->success) {
         *b->new_data = false;
+        return;
     }
     
-    *b->success = rq_com_get_valid_stream();
+    // Retrieve the latest force and torque data from the stream
+    if (b->force_x)  *b->force_x  = rq_state_get_received_data(0);
+    if (b->force_y)  *b->force_y  = rq_state_get_received_data(1);
+    if (b->force_z)  *b->force_z  = rq_state_get_received_data(2);
+    if (b->torque_x) *b->torque_x = rq_state_get_received_data(3);
+    if (b->torque_y) *b->torque_y = rq_state_get_received_data(4);
+    if (b->torque_z) *b->torque_z = rq_state_get_received_data(5);
+    
+    if (b->wrench) {
+        for (int i = 0; i < 6; i++) {
+            b->wrench[i] = rq_state_get_received_data(i);
+        }
+    }
+    *b->new_data = true;
 }
 
 void robif2b_robotiq_ft_zero(struct robif2b_robotiq_ft_nbx *b)
