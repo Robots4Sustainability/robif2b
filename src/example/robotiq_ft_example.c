@@ -5,15 +5,12 @@
 
 int main(void)
 {
-    float fx, fy, fz, tx, ty, tz;
     float wrench[6];
     enum robif2b_robotiq_ft_state state;
     bool success, new_data;
 
     struct robif2b_robotiq_ft_nbx sensor = {
         .conf = { .device = "/dev/ttyUSB0", .baudrate = 19200 },
-        .force_x = &fx, .force_y = &fy, .force_z = &fz,
-        .torque_x = &tx, .torque_y = &ty, .torque_z = &tz,
         .wrench = wrench,
         .state = &state,
         .success = &success,
@@ -36,7 +33,7 @@ int main(void)
         robif2b_robotiq_ft_update(&sensor);
         if (new_data) {
             printf("F: [%6.2f, %6.2f, %6.2f] N  T: [%6.3f, %6.3f, %6.3f] Nm\n",
-                   fx, fy, fz, tx, ty, tz);
+                   wrench[0], wrench[1], wrench[2], wrench[3], wrench[4], wrench[5]);
         }
         usleep(4000);
     }

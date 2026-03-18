@@ -29,12 +29,6 @@ struct robif2b_robotiq_ft_nbx
     struct robif2b_robotiq_ft_config conf;
 
     // Ports
-    float *force_x;                 // [N]
-    float *force_y;                 // [N]
-    float *force_z;                 // [N]
-    float *torque_x;                // [Nm]
-    float *torque_y;                // [Nm]
-    float *torque_z;                // [Nm]
     float *wrench;                  // [Fx, Fy, Fz, Tx, Ty, Tz]
 
     // Status

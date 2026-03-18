@@ -70,14 +70,7 @@ void robif2b_robotiq_ft_update(struct robif2b_robotiq_ft_nbx *b)
         return;
     }
     
-    // Retrieve the latest force and torque data from the stream
-    if (b->force_x)  *b->force_x  = rq_state_get_received_data(0);
-    if (b->force_y)  *b->force_y  = rq_state_get_received_data(1);
-    if (b->force_z)  *b->force_z  = rq_state_get_received_data(2);
-    if (b->torque_x) *b->torque_x = rq_state_get_received_data(3);
-    if (b->torque_y) *b->torque_y = rq_state_get_received_data(4);
-    if (b->torque_z) *b->torque_z = rq_state_get_received_data(5);
-    
+    // Retrieve the latest force and torque data from the stream    
     if (b->wrench) {
         for (int i = 0; i < 6; i++) {
             b->wrench[i] = rq_state_get_received_data(i);
